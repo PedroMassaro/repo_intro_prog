@@ -1,0 +1,7 @@
+#!/usr/bin/env python3
+
+dados = 'GTACCTTGATTTCGTATTCTGAGAGGCTGCTGCTTAGCGGTAGCCCCTTGGTTTCCGTGGCAACGGAAAA'
+
+a = 'ATG' in dados
+
+print(a)
