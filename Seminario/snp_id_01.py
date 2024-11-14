@@ -2,9 +2,14 @@
 
 import sys
 
-# Definindo a exceção personalizada NotATCG
+#Definindo a exceção personalizada NotATCG
 class NotATCG(Exception):
     pass
+
+#Definindo a exceção personalizada Notdigit
+class Notdigit(Exception):
+    pass
+
 
 try:
     file01 = sys.argv[1]
@@ -44,7 +49,50 @@ try:
 
     # Verificando se não há outros caracteres dentro das sequências
     if not set(seq01).issubset(set("ATCG")) or not set(seq02).issubset(set("ATCG")):
-        raise NotATCG("Erro: Outros desses caracteres, além desse conjunto A, T, C, G, foram encontrados nesta sequência. Verifique sua sequência!")
+        raise NotATCG("Erro: Outros caracteres, além desse conjunto A, T, C, G, foram encontrados nesta sequência. Verifique sua sequência!")
+
+    # Alinhando as sequências - recebendo a posição do primeiro nucleotídeo
+    posi01 = sys.argv[3]
+    print("Usuário forneceu o primeiro nucleotídeo da sequência 01 está na posição: ", posi01)
+
+    posi02 = sys.argv[4]
+    print("Usuário forneceu o primeiro nucleotídeo da sequência 02 está na posição: ", posi02)
+
+    # Verificando se as posição de input são apenas dígitos numéricos
+    if not posi01.isdigit() or not posi02.isdigit():
+      raise Notdigit("Erro: A posição do primeiro nucleptídeo da sequência deve ser apenas dígitos númericos")
+
+    # Transformando a variável em número inteiro
+    posi01 = int(posi01)
+    posi02 = int(posi02)
+
+    # Ajustando a posição incia da sequência
+    #if posi01 != posi02:
+     # add01 = "x" * (posi01 - 1)
+     # seq01 = add01 + seq01
+     # add02 = "x" * (posi02 - 1)
+     # seq02 = add02 + seq02
+    add01 = "x" * (posi01 - 1)
+    seq01 = add01 + seq01
+    add02 = "x" * (posi02 - 1)
+    seq02 = add02 + seq02
+
+    # Ajustando o tamanho final das sequências - deixando elas com o mesmo tamanho
+    end01 = len(seq01)
+    end02 = len(seq02)
+    if end01 > end02:
+      add_end02 = "x" * (end01 - end02)
+      seq02 = seq02 + add_end02
+    else:
+      add_end01 = "x" * (end02 - end01)
+      seq01 = seq01 + add_end01
+
+    print(seq01)
+    print((len(seq01) == len(seq02)))
+
+
+    # Parei aquiii!!!!
+
 
     # Comparação das sequências para identificação de SNPs
     print("Comparando sequências...")
@@ -73,6 +121,9 @@ except IOError:
     print("Error: Can't find file:", file01)
 # Presença de outros caracteres, além de ATCG
 except NotATCG:
-    print("Erro: Outros desses caracteres, além desse conjunto A, T, C, G, foram encontrados nesta sequência. Verifique sua sequência!")
+    print("Erro: Outros caracteres, além desse conjunto A, T, C, G, foram encontrados nesta sequência. Verifique sua sequência!")
+# Posição do primeiro nucleotídio errado
+except Notdigit:
+    print("Erro: A posição do primeiro nucleptídeo da sequência deve ser apenas dígitos númericos")
 else:
     print("Your file was uploaded correctly")
