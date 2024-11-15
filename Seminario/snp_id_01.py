@@ -67,11 +67,6 @@ try:
     posi02 = int(posi02)
 
     # Ajustando a posição incia da sequência
-    #if posi01 != posi02:
-     # add01 = "x" * (posi01 - 1)
-     # seq01 = add01 + seq01
-     # add02 = "x" * (posi02 - 1)
-     # seq02 = add02 + seq02
     add01 = "x" * (posi01 - 1)
     seq01 = add01 + seq01
     add02 = "x" * (posi02 - 1)
@@ -87,29 +82,33 @@ try:
       add_end01 = "x" * (end02 - end01)
       seq01 = seq01 + add_end01
 
-    print(seq01)
-    print((len(seq01) == len(seq02)))
-
-
-    # Parei aquiii!!!!
-
-
+    # Buscando pelos SNPs
     # Comparação das sequências para identificação de SNPs
     print("Comparando sequências...")
     snps = []
+    # Intervalo a qual ambas as sequências devem ser iguais antes e depois do SNP
+    inter = int(sys.argv[5])
     for i in range(min(len(seq01), len(seq02))):
-        if seq01[i] != seq02[i]:
-            snps.append((i, seq01[i], seq02[i]))
+        if seq01[i] != "x" and seq02[i] != "x":
+          if seq01[i] != seq02[i]:
+            # Verificando se os índices estão dentro do intervalo válido antes de acessá-los
+            if (i - inter - 1 >= 0 and i + 1 + inter < len(seq01) and
+              seq01[i - inter:i] == seq02[i - inter:i] and
+              seq01[i + 1:i + 1 + inter] == seq02[i + 1:i + 1 + inter]):
+
+              snps.append((i, seq01[i], seq02[i]))
 
     # Armazenamento e exibição dos SNPs
     if snps:
         print("SNPs identificados:")
         for pos, base1, base2 in snps:
             print(f"SNP identificado na posição {pos}: {base1} -> {base2}")
+        # Exibição da contagem de SNPs
+        print(f"Total de {len(snps)} SNPs identificados.")
     else:
         print("Nenhum SNP identificado.")
     # Exibição da contagem de SNPs
-    print(f"Total de {len(snps)} SNPs identificados.")
+    #print(f"Total de {len(snps)} SNPs identificados.")
 
 except ValueError:
     print("O arquivo deve ter uma das seguintes extensões '.fasta', '.fa' ou '.nt'.")
